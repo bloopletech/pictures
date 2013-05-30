@@ -1,13 +1,4 @@
 $(function() {  
-  function downloadUrl(src) {
-    var a = document.createElement("a");
-    a.download = "";
-    a.href = src;
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-  }
-
   $("body").append('<div id="backdrop"><img id="performer"></div>');
 
   var backdrop = $("#backdrop");
@@ -23,14 +14,9 @@ $(function() {
   }
 
   performer.load(showPerformer).click(function(event) {
-    if(event.ctrlKey) {
-      downloadUrl(performer.attr("src"));
-    }
-    else {
-      if(performer.css("maxWidth") == "100%") performer.css({ maxWidth: "", maxHeight: "" });
-      else performer.css({ maxWidth: "100%", maxHeight: "100%" });
-      showPerformer();
-    }
+    if(performer.css("maxWidth") == "100%") performer.css({ maxWidth: "", maxHeight: "" });
+    else performer.css({ maxWidth: "100%", maxHeight: "100%" });
+    showPerformer();
 
     event.stopPropagation();
   });

@@ -27,12 +27,10 @@ input[type="text"], select { padding: 1px; }
 
 .title {  }
 #items { padding: 2px 0 0 2px; }
-#items li { margin: 0 2px 2px 0; float: left; list-style-type: none; position: relative; overflow: hidden; }
-#items li .emblems, #items li .actions { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
-#items li .actions { display: none; right: auto; left: 0; width: 32px; }
+#items li { width: 172px; height: 172px; margin: 0 2px 2px 0; float: left; list-style-type: none; position: relative; overflow: hidden; }
 #items li .wrapper { position: relative; }
-#items li .wrapper > a { color: #000000; text-decoration: none; }
-#items li .info-wrapper { position: absolute; bottom: 0; background-color: #ffffff; }
+#items li .wrapper > a { display: block; color: #000000; text-decoration: none; }
+#items li .info-wrapper { position: absolute; bottom: 0; width: 100%; background-color: #ffffff; }
 #items li .info { padding: 2px; }
 #items li .info img { vertical-align: middle; }
 #items .tag_list { min-height: 1.2em; }
@@ -40,30 +38,6 @@ input[type="text"], select { padding: 1px; }
 #items input { width: 100%; }
 
 #items li.no_results { color: #ffffff; width: auto; float: none; text-align: center; padding: 40px 0; }
-/*#items .tags form { display: none; }*/
-/*
-#items li:hover .wrapper { position: absolute; top: 0; left: 0; background-color: #ffffff; }
-#items li:hover .actions { display: block; }*/
-
-#item .title_image { float: left; margin-right: 15px; }
-#item #info { float: left; width: 315px; }
-#item .actions { margin-top: 15px; border-top: 1px solid #a0a0a0; padding-top: 15px; }
-
-/*
-#items-index body {
- background-image: -webkit-gradient(
-    linear,
-    left top,
-    right bottom,
-    color-stop(0.39, rgb(0,0,0)),
-    color-stop(0.73, rgb(46,46,46))
-);
- background-image: -moz-linear-gradient(
-    left top,
-    rgb(0,0,0) 39%,
-    rgb(46,46,46) 73%
-);
-}*/
 
 #backdrop {
   position: fixed; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000000; overflow: auto; display: none;
@@ -71,10 +45,6 @@ input[type="text"], select { padding: 1px; }
 
 #performer {
   position: relative; top: 50%; left: 50%;
-}
-
-a.picture {
-  display: block;
 }
 
 @media screen and (max-width: 844px) {

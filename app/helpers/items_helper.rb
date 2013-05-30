@@ -10,12 +10,11 @@ module ItemsHelper
   end
 
   def wbrize(str)
-    str
-    #str.split(' ').map { |sub_str| sub_str.split(/.{,30}/).join("<wbr>") }.join(' ')
+    raw str.split(' ').map { |sub_str| sub_str.split(/(.{,30})/).map { |s| h s }.join("<wbr>") }.join(' ')
   end
 
   def item_title(item, show)
-    raw (show ? "<div class='title'>#{h wbrize(item.filename)}</div>" : "")
+    raw (show ? "<div class='title'>#{h wbrize(truncate(item.filename, :length => 80))}</div>" : "")
   end
 
   def selector(name, options)
