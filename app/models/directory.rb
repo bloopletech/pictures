@@ -9,7 +9,8 @@ class Directory < Item
   end
 
   def directories
-    @directories ||= Dir.glob("#{@path}/*/").map { |e| e.gsub(/\/$/, "") }.sort_by { |e| File.basename(e) }.map { |e| Directory.new(e) }
+    @directories ||= (@path == Pictures.dir.path ? [] : [Directory.new(@path, "..")]) +
+     Dir.glob("#{@path}/*/").map { |e| e.gsub(/\/$/, "") }.sort_by { |e| File.basename(e) }.map { |e| Directory.new(e) }
   end
 
   def pictures
@@ -20,5 +21,9 @@ class Directory < Item
     @children = nil
     @directories = nil
     @pictures = nil
+  end
+
+  def warm
+    children; nil
   end
 end

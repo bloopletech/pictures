@@ -3,8 +3,9 @@ require "digest/md5"
 class Item
   extend ActiveModel::Naming
 
-  def initialize(path)
+  def initialize(path, filename = nil)
     @path = path
+    @filename = filename
   end
 
   def self.from_url(url)

@@ -18,8 +18,8 @@ Pictures::Application.routes.draw do |map|
   root :to => "items#index"
 =end
   
-  match '/d(/:path)' => 'directories#show'
-  match '/p(/:path)' => 'pictures#show'
+  match '/d(/*path)' => 'directories#show'
+  match '/p(/*path)' => 'pictures#show'
 
   match '/stylesheets/dynamic.css' => 'items#dynamic_stylesheet'
   

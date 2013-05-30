@@ -1,19 +1,23 @@
 class Picture < Item
   def preview_url
-    @preview_url ||= "/system/previews#{url}"
+    @preview_url ||= "/system/previews#{url}.jpg"
 
-    preview_path = "#{Pictures.previews_dir}#{url}"
+    preview_path = "#{Pictures.previews_dir}#{url}.jpg"
     if !File.exists?(preview_path)
-      FileUtils.mkdir_p(File.dirname(preview_path))
-      img = Magick::ImageList.new(path)
-      p_width = 172
-      p_height = 172
-      img.change_geometry!("#{p_width}x#{p_height}^") { |cols, rows, _img| _img.resize!(cols, rows) }
-      img.page = Magick::Rectangle.new(img.columns, img.rows, 0, 0)
-      img = img.extent(p_width, p_height, 0, 0)
-      img.excerpt!(0, 0, p_width, p_height)
+      begin
+        FileUtils.mkdir_p(File.dirname(preview_path))
+        img = Magick::ImageList.new(path)
+        p_width = 172
+        p_height = 172
+        img.change_geometry!("#{p_width}x#{p_height}^") { |cols, rows, _img| _img.resize!(cols, rows) }
+        img.page = Magick::Rectangle.new(img.columns, img.rows, 0, 0)
+        img = img.extent(p_width, p_height, 0, 0)
+        img.excerpt!(0, 0, p_width, p_height)
 
-      img.write(preview_path)
+        img.write(preview_path)
+      rescue Exception => e
+        Rails.logger.debug("#{e.message}\n#{e.backtrace}")
+      end
     end
 
     @preview_url
