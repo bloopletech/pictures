@@ -19,7 +19,7 @@ Pictures::Application.routes.draw do |map|
 =end
   
   match '/d(/*path)' => 'directories#show'
-  match '/p(/*path)' => 'pictures#show'
+#  match '/p(/*path)' => 'pictures#show'
 
   match '/stylesheets/dynamic.css' => 'items#dynamic_stylesheet'
   

@@ -121,14 +121,12 @@ class DirectoriesController < ApplicationController
 =end
 
   def show
-    puts "cache: #{cache_store.inspect}"
     path = params[:path] || ""
     key = "pictures_directories_#{path}"
+
     @items = if cache_store.exist?(key)
-      puts "CACHE HIT FOR #{key.inspect}"
       cache_store.read(key)
     else
-      puts "CACHE MISS FOR #{key.inspect}"
       dir = Directory.from_url_path(params[:path] || "")
       dir.warm
       cache_store.write(key, dir)

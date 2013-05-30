@@ -25,7 +25,7 @@ module Pictures
   class SystemStaticMiddleware
     FILE_METHODS = %w(GET HEAD).freeze
     PREVIEWS_REGEX = /^\/system\/previews\//
-    PICTURES_REGEX = /^\/system\/p\//
+    PICTURES_REGEX = /^\/p\//
 
     def initialize(app)
       @app = app
@@ -36,21 +36,17 @@ module Pictures
       path   = ::Rack::Utils.unescape(env['PATH_INFO']).chomp('/')
       method = env['REQUEST_METHOD']
 
-      if FILE_METHODS.include?(method) && path =~ /^\/system\//
-        if path =~ PREVIEWS_REGEX
-          @file_server.root = Pictures.previews_dir
-          env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PREVIEWS_REGEX, ""))
-        elsif path =~ PICTURES_REGEX
-          @file_server.root = Pictures.dir.path
-          env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PICTURES_REGEX, ""))
-        else
-          #What do
-        end
-
-        return @file_server.call(env)
+      if FILE_METHODS.include?(method) && path =~ PREVIEWS_REGEX
+        @file_server.root = Pictures.previews_dir
+        env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PREVIEWS_REGEX, ""))
+      elsif FILE_METHODS.include?(method) && path =~ PICTURES_REGEX
+        @file_server.root = Pictures.dir.path
+        env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PICTURES_REGEX, ""))
       else
         return @app.call(env)
       end
+
+      return @file_server.call(env)
     end
   end
 end

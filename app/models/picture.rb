@@ -6,6 +6,7 @@ class Picture < Item
     if !File.exists?(preview_path)
       begin
         FileUtils.mkdir_p(File.dirname(preview_path))
+=begin
         img = Magick::ImageList.new(path)
         p_width = 172
         p_height = 172
@@ -15,16 +16,15 @@ class Picture < Item
         img.excerpt!(0, 0, p_width, p_height)
 
         img.write(preview_path)
+=end
+        cmd = "convert #{File.escape_name("#{path}[0]")} -geometry '172x172^' +repage -gravity Center -crop '172x172+0+0' +repage #{File.escape_name(preview_path)}"
+        `#{cmd}`
       rescue Exception => e
         Rails.logger.debug("#{e.message}\n#{e.backtrace}")
       end
     end
 
     @preview_url
-  end
-
-  def direct_url
-    "/system#{url}"
   end
 
 #  acts_as_taggable
