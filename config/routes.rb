@@ -21,6 +21,8 @@ Pictures::Application.routes.draw do |map|
   match '/d(/*path)' => 'directories#show'
 #  match '/p(/*path)' => 'pictures#show'
 
+  root :to => "directories#show"
+
   match '/stylesheets/dynamic.css' => 'items#dynamic_stylesheet'
   
   # The priority is based upon order of creation:
