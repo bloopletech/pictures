@@ -1,9 +1,11 @@
-require 'acts-as-taggable-on/version'
-raise "Wrong ActsAsTaggableOn version!" unless ActsAsTaggableOn::VERSION == "2.3.3" #Needed to ensure our joins_values hack doesn't fail silently in new versions of AATO
+#require 'acts-as-taggable-on/version'
+#raise "Wrong ActsAsTaggableOn version!" unless ActsAsTaggableOn::VERSION == "2.3.3" #Needed to ensure our joins_values hack doesn't fail silently in new versions of AATO
 
-class ItemsController < ApplicationController
+require "will_paginate/array"
+
+class DirectoriesController < ApplicationController
   SORT_OPTIONS = [['Published', 'published_on'], ['A-Z', 'sort_key'], ['Last opened at', 'last_opened_at'], ['Date added', 'created_at'], ['Pages', 'pages'], ['Popularity', 'opens']]
-
+=begin
   def index
     @items = _search_results.order(params[:sort_direction] == "RAND" ? "RANDOM()" : "#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
     
@@ -115,5 +117,12 @@ class ItemsController < ApplicationController
 
   def qt(term)
     Item.connection.quote("%#{term}%")
+  end
+=end
+
+  def show
+    @items = Directory.from_url_path(params[:path] || "").children.paginate(:page => params[:page], :per_page => 100)
+
+    puts "@directory: #{@directory.inspect}"
   end
 end

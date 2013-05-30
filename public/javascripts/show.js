@@ -1,50 +1,47 @@
-$(function()
-{
-  function get_index()
-  {
-    var index = parseInt(location.hash.substr(1)); 
-    if(isNaN(index)) index = 0;
-    return index;
+$(function() {  
+  function downloadUrl(src) {
+    var a = document.createElement("a");
+    a.download = "";
+    a.href = src;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
   }
 
-  function go_next_page()
-  {
-    var index = get_index();
-    index += 1;
+  $("body").append('<div id="backdrop"><img id="performer"></div>');
 
-    if(index >= pages.length) index = pages.length - 1;
-    location.hash = "#" + index;
-  }
+  var backdrop = $("#backdrop");
+  var performer = $("#performer");
 
-  $(window).bind('hashchange', function()
-  {
-    var index = get_index();
-
-    $("#image").attr('src', "/images/blank.png");    
-    window.scrollTo(0, 0);
-    $("#image").attr('src', pages[index]);
-
-    if((index + 1) < pages.length)
-    {
-      preload = new Image();
-      preload.src = pages[index + 1];      
-    }
-      
-  }).trigger('hashchange');
-
-  $(window).keydown(function(event)
-  {
-    if((event.keyCode == 32 || event.keyCode == 13) && scrollDistanceFromBottom() <= 0)
-    {
-      event.preventDefault();
-      go_next_page();      
-    }
-    else if(event.keyCode == 8)
-    {
-      event.preventDefault();
-      history.back();
-    }
+  backdrop.click(function() {
+    backdrop.hide();
+    performer.attr("src", null);
   });
 
-  $("body").click(go_next_page);  
+  function showPerformer() {
+    performer.show().css({ marginLeft: -(performer.width() / 2) + "px", marginTop: -(performer.height() / 2) + "px" });
+  }
+
+  performer.load(showPerformer).click(function(event) {
+    if(event.ctrlKey) {
+      downloadUrl(performer.attr("src"));
+    }
+    else {
+      if(performer.css("maxWidth") == "100%") performer.css({ maxWidth: "", maxHeight: "" });
+      else performer.css({ maxWidth: "100%", maxHeight: "100%" });
+      showPerformer();
+    }
+
+    event.stopPropagation();
+  });
+
+  $("a.picture").live("click", function(event) {
+    performer.css({ maxWidth: "100%", maxHeight: "100%", marginLeft: "0", marginTop: "0"}).hide();
+    performer.attr("src", $(this).attr("href"));
+    backdrop.show();
+
+    event.preventDefault();
+  });
+
+  $(window).resize(showPerformer);
 });

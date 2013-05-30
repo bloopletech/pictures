@@ -15,9 +15,9 @@ Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
 
 require File.dirname(__FILE__) + '/../lib/system_static_middleware'
 
-module Mangar
+module Pictures
   class Application < Rails::Application
-    config.middleware.insert_before ::ActionDispatch::Static, ::Mangar::SystemStaticMiddleware
+    config.middleware.insert_before ::ActionDispatch::Static, ::Pictures::SystemStaticMiddleware
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -54,27 +54,19 @@ module Mangar
     config.filter_parameters += [:password]
   end
 
-  mattr_accessor :dir, :mangar_dir, :books_dir, :videos_dir, :deleted_dir, :exported_dir, :import_dir
-
-  Mangar.dir = File.expand_path("~/.mangar/")
-
-  Mangar.mangar_dir = File.expand_path("#{Mangar.dir}/mangar-data")
-  Mangar.books_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/books")
-  Mangar.videos_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/videos")
-  Mangar.import_dir = File.expand_path("#{Mangar.dir}/import")
-  Mangar.exported_dir = File.expand_path("#{Mangar.dir}/exported")
-  Mangar.deleted_dir = File.expand_path("#{Mangar.dir}/deleted")
-
-  [Mangar.dir, Mangar.mangar_dir, Mangar.books_dir, Mangar.videos_dir, Mangar.import_dir, Mangar.deleted_dir, Mangar.exported_dir].each { |d| FileUtils.mkdir_p(d) unless File.exists?(d) }
+  mattr_accessor :dir, :previews_dir
+ 
+#  [Pictures.dir].each { |d| FileUtils.mkdir_p(d) unless File.exists?(d) }
 end
-
+=begin
 module CarrierWave
   class << self
     def root
-      "#{Mangar.mangar_dir}/public"
+      "#{Pictures.mangar_dir}/public"
     end
   end
 end
+=end
 
 require Rails.root.join('lib/file_extensions')
 require Rails.root.join('lib/dir_extensions')

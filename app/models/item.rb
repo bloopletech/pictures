@@ -1,38 +1,49 @@
-class Item < ActiveRecord::Base
-  acts_as_taggable
+require "digest/md5"
 
-  mount_uploader :preview, ItemPreviewUploader
+class Item
+  extend ActiveModel::Naming
 
-  def real_path
-    File.expand_path("#{Mangar.send("#{self.class.name.underscore.pluralize}_dir")}/#{path}")
+  def initialize(path)
+    @path = path
   end
 
-  def open
-    increment!(:opens)
-    update_attribute(:last_opened_at, DateTime.now)
-  end
+  def self.from_url(url)
+    raise "Invalid URL" if url.nil? || url.length < 2 || url[0..0] != "/"
 
-  def delete_original
-    begin
-      FileUtils.mkdir_p(File.dirname("#{Mangar.deleted_dir}/#{path}"))
-      File.rename(real_path, "#{Mangar.deleted_dir}/#{path}")
-    rescue Exception => e
-      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
-      return
+    klass = case url[1..1]
+    when "d"
+      Directory
+    when "p"
+      Picture
+    else
+      raise "Invalid URL"
     end
+    klass.new("#{Pictures.dir.path}#{url[2..-1]}")
   end
 
-  def export
-    begin
-      FileUtils.mkdir_p(File.dirname("#{Mangar.exported_dir}/#{path}"))
-      FileUtils.cp_r(real_path, "#{Mangar.exported_dir}/#{path}")
-    rescue Exception => e
-      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
-      return
-    end
+  def self.from_url_path(url_path)
+    self.new("#{Pictures.dir.path}#{url_path.blank? ? "" : "/#{url_path}"}")
   end
 
-  def self.sort_key(title)
-    title.gsub(/[^A-Za-z0-9]+/, '').downcase
+  attr_reader :path
+
+  def url
+    @url ||= "/#{self.class.to_s[0..0].downcase}#{@path.gsub(/^#{Regexp.escape Pictures.dir.path}/, "")}"
+  end
+
+  def filename
+    @filename ||= File.basename(path)
+  end
+
+  def to_key
+    @to_key ||= [Digest::MD5.hexdigest(url)]
+  end
+
+  def opens
+    0
+  end
+
+  def pages
+    0
   end
 end

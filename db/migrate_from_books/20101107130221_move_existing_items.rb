@@ -7,7 +7,7 @@ class MoveExistingItems < ActiveRecord::Migration
       next if book.upgraded?
       puts "path: #{book.path}"
       relative_path = book.path
-      real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
+      real_path = File.expand_path("#{Pictures.dir}/#{relative_path}")
 
       unless File.exists?(real_path)
         puts "SKIPPING #{real_path}"
@@ -15,7 +15,7 @@ class MoveExistingItems < ActiveRecord::Migration
       end
 
       relative_dir = relative_path.gsub(/#{Book::VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')    
-      destination_dir = File.expand_path("#{Mangar.book_images_dir}/#{relative_dir}")
+      destination_dir = File.expand_path("#{Pictures.book_images_dir}/#{relative_dir}")
 
       FileUtils.mkdir_p(destination_dir)
 

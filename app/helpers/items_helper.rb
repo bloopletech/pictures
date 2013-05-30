@@ -15,7 +15,7 @@ module ItemsHelper
   end
 
   def item_title(item, show)
-    raw (show ? "<div class='title'>#{h wbrize(item.title)}</div>" : "")
+    raw (show ? "<div class='title'>#{h wbrize(item.filename)}</div>" : "")
   end
 
   def selector(name, options)

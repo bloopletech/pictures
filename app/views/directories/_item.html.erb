@@ -1,0 +1,30 @@
+<li id="<%= dom_id item %>" class="page_<%= @items.current_page %> <%= item.class.name.downcase %>">
+  <div class="wrapper">
+    <%
+    many_opens = false
+    many_pages = false
+    %>
+    <% if many_opens || many_pages %>
+      <div class="emblems">
+        <% if many_opens %><%= image_tag("icons/award_star_bronze_1.png", :title => "Has been read 10 or more times.") %><% end %>
+        <% if many_pages %><%= image_tag("icons/book.png", :title => "Has 50 or more pages") %><% end %>
+      </div>
+    <% end %>
+    <% if item.is_a?(Picture) %>
+      <%= link_to(image_tag(item.preview_url), item.direct_url, :class => "picture") %>
+    <% else %>
+      <%= link_to(image_tag(item.preview_url), item.url, :class => "picture") %>
+    <% end %>
+    <div class="info-wrapper">
+      <div class="info">
+        <%= item_title(item, true) %>
+        <div class="tag_list"><%#= h item.tag_list %></div>
+        <%#= form_for item.becomes(Item), :remote => true do |f| %>
+          <%#= f.text_field :tag_list, :class => 'input' %>
+        <%# end %>
+        <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= item.pages %>&nbsp;&nbsp;
+        <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= item.opens %></span><br>
+      </div>
+    </div>
+  </div>
+</li>

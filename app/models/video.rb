@@ -14,7 +14,7 @@ class Video < Item
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(Mangar.import_dir)} && find . -depth \\( -type f \\( #{File::VIDEO_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(Pictures.import_dir)} && find . -depth \\( -type f \\( #{File::VIDEO_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
@@ -24,13 +24,13 @@ CMD
 
     path_list.each { |path| self.import(path) }
     
-#    system("cd #{File.escape_name(Mangar.import_dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
+#    system("cd #{File.escape_name(Pictures.import_dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
   end
 
   def self.import(relative_path)
-    real_path = File.expand_path("#{Mangar.import_dir}/#{relative_path}")
+    real_path = File.expand_path("#{Pictures.import_dir}/#{relative_path}")
     relative_path = relative_path.gsub('/', '__')
-    destination_path = File.expand_path("#{Mangar.videos_dir}/#{relative_path}")
+    destination_path = File.expand_path("#{Pictures.videos_dir}/#{relative_path}")
     
     last_modified = File.mtime(real_path)
     preview = nil
@@ -40,7 +40,7 @@ CMD
       File.rename(real_path, destination_path)
       preview = Video.preview_from_video_file(destination_path)
     rescue Exception => e
-      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
+      ActionDispatch::ShowExceptions.new(Pictures::Application.instance).send(:log_error, e)
       return
     end
 
@@ -63,7 +63,7 @@ CMD
     begin
       update_attribute(:preview, Video.preview_from_video_file(real_path))
     rescue Exception => e
-      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
+      ActionDispatch::ShowExceptions.new(Pictures::Application.instance).send(:log_error, e)
       return
     end
   end

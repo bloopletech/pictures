@@ -1,5 +1,6 @@
 require 'rack/utils'
 
+=begin
 class Rack::File
   def _call(env)
     @path_info = Rack::Utils.unescape(env["PATH_INFO"])
@@ -18,10 +19,13 @@ class Rack::File
     end
   end
 end
+=end
 
-module Mangar
+module Pictures
   class SystemStaticMiddleware
     FILE_METHODS = %w(GET HEAD).freeze
+    PREVIEWS_REGEX = /^\/system\/previews\//
+    PICTURES_REGEX = /^\/system\/p\//
 
     def initialize(app)
       @app = app
@@ -29,19 +33,24 @@ module Mangar
     end
 
     def call(env)
-      @file_server.root = "#{Mangar.mangar_dir}/public"
-
-      path   = env['PATH_INFO'].chomp('/')
+      path   = ::Rack::Utils.unescape(env['PATH_INFO']).chomp('/')
       method = env['REQUEST_METHOD']
-      
-      
-  #s = TCPSocket.new 'yourdomain.com', 5000
-  #File.open 'somefile.txt' { |f| s.sendfile f }
-  #s.close
-      
-      return @file_server.call(env) if FILE_METHODS.include?(method) && path =~ /^\/system\//
 
-      @app.call(env)
+      if FILE_METHODS.include?(method) && path =~ /^\/system\//
+        if path =~ PREVIEWS_REGEX
+          @file_server.root = Pictures.previews_dir
+          env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PREVIEWS_REGEX, ""))
+        elsif path =~ PICTURES_REGEX
+          @file_server.root = Pictures.dir.path
+          env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PICTURES_REGEX, ""))
+        else
+          #What do
+        end
+
+        return @file_server.call(env)
+      else
+        return @app.call(env)
+      end
     end
   end
 end

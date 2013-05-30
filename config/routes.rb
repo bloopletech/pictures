@@ -1,4 +1,5 @@
-Mangar::Application.routes.draw do |map|
+Pictures::Application.routes.draw do |map|
+=begin
   resources :items do
     member do
       get :more_info
@@ -15,6 +16,10 @@ Mangar::Application.routes.draw do |map|
   resources :videos, :only => [:show]
 
   root :to => "items#index"
+=end
+  
+  match '/d(/:path)' => 'directories#show'
+  match '/p(/:path)' => 'pictures#show'
 
   match '/stylesheets/dynamic.css' => 'items#dynamic_stylesheet'
   
