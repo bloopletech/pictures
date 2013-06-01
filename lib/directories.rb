@@ -10,20 +10,15 @@ class Directories
     @mutex.synchronize {
       key = path.to_s
       if @cache.key?(key)
-        @cache[key][:directory]
+        @cache[key]
       else
-        if @cache.keys.length > 5
-          oldest = nil
-          @cache.each_pair { |k, v| oldest = k if oldest.nil? || v[:added] < @cache[oldest][:added] }
-          puts "oldest is: #{oldest.inspect}"
-          @cache.delete(oldest)
+        if @cache.keys.length > 50
+          @cache.delete(@cache.keys.first)
         end
-        puts "storing, cache: #{@cache.inspect}"
 
         dir = Directory.new(path)
         dir.load
-        @cache[key] = { :directory => dir, :added => Time.now }
-        dir
+        @cache[key] = dir
       end
     }
   end

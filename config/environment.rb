@@ -9,20 +9,9 @@ Pictures::Application.initialize!
 #ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :pool => 5, :timeout => 5000, :database => Pictures::Application::DATABASE_PATH)
 #ActiveRecord::Migrator.migrate("#{Rails.root}/db/migrate/")
 
-Pictures.dir = Directory.new(File.expand_path("~/.pictures/"))
+Pictures.dir = Directory.new(Pathname.new("~/.pictures/").expand_path)
 
-Pictures.previews_dir = "#{Pictures.dir.path}/.previews"
-
-FileUtils.mkdir_p(Pictures.previews_dir) unless File.exists?(Pictures.previews_dir)
-
-module CarrierWave
-  class << self
-    def root
-      "#{Pictures.previews_dir}/public"
-    end
-  end
-end
-
-
+Pictures.previews_dir = Pictures.dir + ".previews"
+Pictures.previews_dir.descend { |p| p.mkdir unless p.exist? }
 
 #%w(open gnome-open).detect { |app| system("#{app} http://localhost:30813/") } unless $0 =~ /^rake|irb$/

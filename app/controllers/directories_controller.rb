@@ -122,15 +122,6 @@ class DirectoriesController < ApplicationController
 
   def show
     path = params[:path] || ""
-    key = "pictures_directories_#{path}"
-
-    @items = if cache_store.exist?(key)
-      cache_store.read(key)
-    else
-      dir = Directory.from_url_path(params[:path] || "")
-      dir.warm
-      cache_store.write(key, dir)
-      dir
-    end.children.paginate(:page => params[:page], :per_page => 100)
+    @items = Directories.instance.fetch(Pictures.dir + path).items.paginate(:page => params[:page], :per_page => 100)
   end
 end

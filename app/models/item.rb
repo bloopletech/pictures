@@ -1,43 +1,25 @@
 require "digest/md5"
 
-class Item
+class Item < Pathname
   extend ActiveModel::Naming
-
-  def initialize(path, filename = nil)
-    @path = path
-    @filename = filename
-  end
-
-  def self.from_url(url)
-    raise "Invalid URL" if url.nil? || url.length < 2 || url[0..0] != "/"
-
-    klass = case url[1..1]
-    when "d"
-      Directory
-    when "p"
-      Picture
-    else
-      raise "Invalid URL"
-    end
-    klass.new("#{Pictures.dir.path}#{url[2..-1]}")
-  end
+  extend ActiveSupport::Memoizable
 
   def self.from_url_path(url_path)
-    self.new("#{Pictures.dir.path}#{url_path.blank? ? "" : "/#{url_path}"}")
+    self.new(Pictures.dir + url_path)
   end
-
-  attr_reader :path
 
   def url
-    @url ||= "/#{self.class.to_s[0..0].downcase}#{@path.gsub(/^#{Regexp.escape Pictures.dir.path}/, "")}"
+    "/#{self.class.to_s[0..0].downcase}/#{relative_path_from(Pictures.dir)}"
   end
-
-  def filename
-    @filename ||= File.basename(path)
-  end
+  memoize :url
 
   def to_key
-    @to_key ||= [Digest::MD5.hexdigest(url)]
+    [Digest::MD5.hexdigest(url)]
+  end
+  memoize :to_key
+
+  def title
+    basename.to_s
   end
 
   def opens

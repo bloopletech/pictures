@@ -14,7 +14,7 @@ module ItemsHelper
   end
 
   def item_title(item, show)
-    raw (show ? "<div class='title'>#{h wbrize(truncate(item.filename, :length => 80))}</div>" : "")
+    raw (show ? "<div class='title'>#{h wbrize(truncate(item.title, :length => 80))}</div>" : "")
   end
 
   def selector(name, options)

@@ -1,11 +1,11 @@
 <li id="<%= dom_id item %>" class="page_<%= @items.current_page %> <%= item.class.name.downcase %>">
   <div class="wrapper">
-    <%= link_to(image_tag(item.preview_url), item.url, (item.class.to_s == "Picture" ? { :class => "picture" } : { :target => "_blank" })) %>
+    <%= link_to(image_tag(item.preview_url), item.url, (item.is_a?(Picture) ? { :class => "picture" } : { })) %>
     <div class="info-wrapper">
       <div class="info">
         <%= item_title(item, true) %>
-        <% if item.class.to_s == "Directory" %>
-          <%= image_tag("icons/page_white.png", :title => "Children") %> <%= item.children.length %>
+        <% if item.is_a?(Directory) %>
+          <%= image_tag("icons/page_white.png", :title => "Children") %> <%= item.items.length %>
         <% end %>
       </div>
     </div>

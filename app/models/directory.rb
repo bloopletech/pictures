@@ -1,29 +1,47 @@
 class Directory < Item
+  def initialize(path, parent = false)
+    super(path)
+    @parent = parent
+  end
+
   def preview_url
     "/images/directory.png"
 #    "/system/previews/d/directory.png"
   end
 
-  def children
-    @children ||= directories + pictures
-  end
-
   def directories
-    @directories ||= (@path == Pictures.dir.path ? [] : [Directory.new(@path, "..")]) +
-     Dir.glob("#{@path}/*/").map { |e| e.gsub(/\/$/, "") }.sort_by { |e| File.basename(e) }.map { |e| Directory.new(e) }
+    load
+    @directories
   end
+  memoize :directories
 
   def pictures
-    @pictures ||= Dir.glob("#{@path}/*{#{File::IMAGE_EXTS.join(",")}}").sort_by { |e| File.mtime(e) }.reverse.map { |e| Picture.new(e) }
+    load
+    @pictures
+  end
+  memoize :pictures
+
+  def items
+    directories + pictures
+  end
+  memoize :items
+
+  def title
+    if @parent
+      ".."
+    elsif self == Pictures.dir
+      "Root"
+    else
+      super
+    end
   end
 
-  def reload
-    @children = nil
-    @directories = nil
-    @pictures = nil
-  end
+  def load
+    dirs, pics = children.reject { |p| p.basename.to_s =~ /^\./ }.partition { |p| p.directory? }
 
-  def warm
-    children; nil
+    @directories = dirs.sort_by { |d| d.basename.to_s.downcase }.map { |d| Directory.new(d) }
+    @directories.unshift Directory.new(parent, true) unless self == Pictures.dir
+
+    @pictures = pics.select { |p| File::IMAGE_EXTS.include?(p.extname) }.sort_by { |p| p.mtime }.map { |p| Picture.new(p) }
   end
 end
