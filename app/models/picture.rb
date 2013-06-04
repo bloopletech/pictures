@@ -4,7 +4,7 @@ class Picture < Item
     if !preview_path.exist? || force
       begin
         preview_path.dirname.descend { |p| p.mkdir unless p.exist? }
-        `convert #{File.escape_name("#{self}[0]")} -geometry '172x172^' +repage -gravity Center -crop '172x172+0+0' +repage -quality 50 #{File.escape_name(preview_path.to_s)}`
+        `convert #{File.escape_name("#{self}[0]")} -geometry '172x172^' +repage -gravity Center -crop '172x172+0+0' +repage -quality 50 -strip #{File.escape_name(preview_path.to_s)}`
       rescue Exception => e
         Rails.logger.debug("#{e.message}\n#{e.backtrace}")
       end
@@ -14,9 +14,13 @@ class Picture < Item
   memoize :preview_path
 
   def preview_url
-    "/system/previews/#{preview_path.relative_path_from(Pictures.previews_dir)}"
+    "/previews/#{preview_path.relative_path_from(Pictures.previews_dir)}"
   end
   memoize :preview_url
+
+  def Picture?
+    true
+  end
 
 #  acts_as_taggable
 

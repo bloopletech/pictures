@@ -1,0 +1,6 @@
+page.insert_html(:bottom, "files", :partial => 'file', :collection => @files)
+#page << "update_files()"
+if is_last_page?(@files)
+  page << "last_page = true;"
+  page.insert_html(:bottom, "files", :partial => 'end_of_results')
+end

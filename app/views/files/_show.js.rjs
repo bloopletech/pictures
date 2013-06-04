@@ -1,0 +1,1 @@
+page << "if(window.opener.$('##{dom_id @file} span.opens').length > 0) window.opener.$('##{dom_id @file} span.opens').text('#{@file.opens}');"

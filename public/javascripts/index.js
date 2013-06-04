@@ -1,6 +1,6 @@
-var update_items = function()
+/*var update_files = function()
 {
-  $("#items .tag_list").each(function()
+  $("#files .tag_list").each(function()
   {
     var div = $(this);
     div.click(function(event)
@@ -13,7 +13,7 @@ var update_items = function()
   });
 };
 
-$(update_items);
+$(update_files);*/
 
 $(function()
 { 
@@ -25,7 +25,7 @@ $(function()
     $('#search_form').submit();
   });
 
-  $("#tag_cloud_link").click(function(event)
+/*  $("#tag_cloud_link").click(function(event)
   {
     event.preventDefault();
   });
@@ -38,8 +38,8 @@ $(function()
   $("#tag_cloud").mouseleave(function(event)
   {
     $("#tag_cloud").hide();
-  });
+  });*/
 
-  $("#items .colorbox").colorbox({ width: 590, height: 390 });
+  $("#files .colorbox").colorbox({ width: 590, height: 390 });
   $("#header .colorbox").colorbox({ width: 590, height: 390 });
 });

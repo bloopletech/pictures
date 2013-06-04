@@ -6,7 +6,7 @@ $(function() {
 
   backdrop.click(function() {
     backdrop.hide();
-    performer.attr("src", null);
+    performer.removeAttr("src");
   });
 
   function showPerformer() {
@@ -21,7 +21,7 @@ $(function() {
     event.stopPropagation();
   });
 
-  $("a.picture").live("click", function(event) {
+  $("li.picture > .wrapper > a").live("click", function(event) {
     performer.css({ maxWidth: "100%", maxHeight: "100%", marginLeft: "0", marginTop: "0"}).hide();
     performer.attr("src", $(this).attr("href"));
     backdrop.show();

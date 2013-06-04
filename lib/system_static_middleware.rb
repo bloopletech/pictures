@@ -3,8 +3,6 @@ require 'rack/utils'
 module Pictures
   class SystemStaticMiddleware
     FILE_METHODS = %w(GET HEAD).freeze
-    PREVIEWS_REGEX = /^\/system\/previews\//
-    PICTURES_REGEX = /^\/p\//
 
     def initialize(app)
       @app = app
@@ -12,20 +10,25 @@ module Pictures
     end
 
     def call(env)
-      path   = ::Rack::Utils.unescape(env['PATH_INFO']).chomp('/')
-      method = env['REQUEST_METHOD']
+      path = ::Rack::Utils.unescape(env['PATH_INFO']).chomp('/')
 
-      if FILE_METHODS.include?(method) && path =~ PREVIEWS_REGEX
-        @file_server.root = Pictures.previews_dir.to_s
-        env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PREVIEWS_REGEX, ""))
-      elsif FILE_METHODS.include?(method) && path =~ PICTURES_REGEX
-        @file_server.root = Pictures.dir.to_s
-        env['PATH_INFO'] = ::Rack::Utils.escape(path.gsub(PICTURES_REGEX, ""))
-      else
-        return @app.call(env)
+      if FILE_METHODS.include?(env['REQUEST_METHOD']) && !path.blank?
+        type, relative_path = path[1..-1].split("/", 2)
+        @file_server.root = nil
+
+        if type == "files" && File.image?(relative_path)
+          @file_server.root = Pictures.dir.to_s
+        elsif type == "previews"
+          @file_server.root = Pictures.previews_dir.to_s
+        end
+
+        if @file_server.root
+          env['PATH_INFO'] = ::Rack::Utils.escape(relative_path)
+          return @file_server.call(env)
+        end
       end
-
-      return @file_server.call(env)
+      
+      @app.call(env)
     end
   end
 end

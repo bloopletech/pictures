@@ -3,17 +3,13 @@
 
 require "will_paginate/array"
 
-class DirectoriesController < ApplicationController
+class FilesController < ApplicationController
   SORT_OPTIONS = [['Published', 'published_on'], ['A-Z', 'sort_key'], ['Last opened at', 'last_opened_at'], ['Date added', 'created_at'], ['Pages', 'pages'], ['Popularity', 'opens']]
 =begin
   def index
     @items = _search_results.order(params[:sort_direction] == "RAND" ? "RANDOM()" : "#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
     
     @tags = Item.tag_counts_on(:tags).order("name ASC")
-  end
-
-  def bulk_export
-    _search_results.each { |i| i.export }
   end
 
   def more_info
@@ -28,23 +24,6 @@ class DirectoriesController < ApplicationController
     else
       #boom
     end
-  end
-
-  def destroy
-    @item = Item.find(params[:id])
-
-    #if params[:delete]
-    @item.delete_original
-    #end
-
-    @item.destroy
-  end
-
-  def import_and_update
-    #Thread.new do #Temporarily remopve threading as it seems to be causing import problems
-      Video.import_and_update
-      Book.import_and_update
-    #end
   end
 
   def info
@@ -122,6 +101,6 @@ class DirectoriesController < ApplicationController
 
   def show
     path = params[:path] || ""
-    @items = Directories.instance.fetch(Pictures.dir + path).items.paginate(:page => params[:page], :per_page => 100)
+    @files = Directories.instance.fetch(Pictures.dir + path).files.paginate(:page => params[:page], :per_page => 100)
   end
 end

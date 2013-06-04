@@ -21,10 +21,10 @@ class Directory < Item
   end
   memoize :pictures
 
-  def items
+  def files
     directories + pictures
   end
-  memoize :items
+  memoize :files
 
   def title
     if @parent
@@ -34,6 +34,10 @@ class Directory < Item
     else
       super
     end
+  end
+
+  def Directory?
+    true
   end
 
   def load

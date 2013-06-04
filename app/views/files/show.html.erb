@@ -1,0 +1,36 @@
+<% content_for :head do %>
+  <%= javascript_include_tag 'index', 'endless_scroll' %>
+<% end %>
+
+<div id="wrapper">
+  <div id="tag_cloud" style="display: none;">
+    <%# tag_cloud(@tags, %w(size_1 size_2 size_3 size_4)) do |tag, css_class| %>
+      <%#= link_to tag.name, files_path(params.except(:controller, :action).merge(:search => tag.name)), :class => css_class, :title => pluralize(tag.count, "Occurence") %>
+    <%# end %>
+  </div>
+  
+  <div id="header">
+    <div id="actions" class="desktop-only">
+      <%#= link_to(image_tag("icons/information.png") + "Info", info_files_path, :class => 'colorbox') %>
+      <%#= link_to("Tag cloud", {}, :id => 'tag_cloud_link') %>
+    </div>
+  </div>
+  
+  <div class="clear"></div>
+  <% if @files.empty? || is_last_page?(@files) %>
+    <script type="text/javascript">
+      last_page = true;
+    </script>
+  <% end %>
+  <ul id="files">
+    <% @files.each do |b| %>
+      <%= render :partial => 'file', :locals => { :file => b } %>
+    <% end %>
+    <% if @files.empty? %>
+      <li class='no_results'>No results found.</li>
+    <% elsif is_last_page?(@files) %>
+      <%= render :partial => 'end_of_results' %>
+    <% end %>
+  </ul>
+  <div class="clear"></div>
+</div>

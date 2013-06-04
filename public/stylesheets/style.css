@@ -6,7 +6,7 @@ p, ul { margin-bottom: 1.3em; }
 
 .clear { clear: both; }
 
-#header { padding: 10px; }
+#header { /*padding: 10px;*/ }
 #search { width: 300px; border: 1px solid #a0a0a0; }
 #actions { float: right; }
 
@@ -26,21 +26,21 @@ input[type="text"], select { padding: 1px; }
 #tag_cloud .size_4 { font-size: 1.6em; }
 
 .title {  }
-#items { padding: 2px 0 0 2px; }
-#items li { width: 172px; height: 172px; margin: 0 2px 2px 0; float: left; list-style-type: none; position: relative; overflow: hidden; }
-#items li .wrapper { position: relative; }
-#items li .wrapper > a { display: block; color: #000000; text-decoration: none; }
-#items li .info-wrapper { position: absolute; bottom: 0; width: 100%; background-color: #ffffff; }
-#items li .info { padding: 2px; }
-#items li .info img { vertical-align: middle; }
-#items .tag_list { min-height: 1.2em; }
-#items .tag_list:hover { background-color: #ffffaa; }
-#items input { width: 100%; }
+#files { padding: 2px 0 0 2px; }
+#files li { width: 172px; height: 172px; margin: 0 2px 2px 0; float: left; list-style-type: none; position: relative; overflow: hidden; }
+#files li .wrapper { position: relative; }
+#files li .wrapper > a { display: block; color: #000000; text-decoration: none; }
+#files li .info-wrapper { position: absolute; bottom: 0; width: 100%; background-color: #ffffff; }
+#files li .info { padding: 2px; }
+#files li .info img { vertical-align: middle; }
+#files .tag_list { min-height: 1.2em; }
+#files .tag_list:hover { background-color: #ffffaa; }
+#files input { width: 100%; }
 
-#items li.no_results { color: #ffffff; width: auto; float: none; text-align: center; padding: 40px 0; }
+#files li.no_results { color: #ffffff; width: auto; float: none; text-align: center; padding: 40px 0; }
 
 #backdrop {
-  position: fixed; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000000; overflow: auto; display: none;
+  position: fixed; top: 0; width: 100%; height: 100%; background-color: #333333; /*background-color: rgba(0, 0, 0, 0.8);*/ z-index: 1000000; overflow: auto; display: none;
 }
 
 #performer {

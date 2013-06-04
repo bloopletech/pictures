@@ -9,7 +9,7 @@ class Item < Pathname
   end
 
   def url
-    "/#{self.class.to_s[0..0].downcase}/#{relative_path_from(Pictures.dir)}"
+    "/files/#{relative_path_from(Pictures.dir)}"
   end
   memoize :url
 
@@ -20,6 +20,14 @@ class Item < Pathname
 
   def title
     basename.to_s
+  end
+
+  def Picture?
+    false
+  end
+
+  def Directory?
+    false
   end
 
   def opens
