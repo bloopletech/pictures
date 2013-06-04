@@ -38,6 +38,7 @@ input[type="text"], select { padding: 1px; }
 #files input { width: 100%; }
 
 #files li.no_results { color: #ffffff; width: auto; float: none; text-align: center; padding: 40px 0; }
+#files li.last_page_message { color: #ffffff; text-align: center; }
 
 #backdrop {
   position: fixed; top: 0; width: 100%; height: 100%; background-color: #333333; /*background-color: rgba(0, 0, 0, 0.8);*/ z-index: 1000000; overflow: auto; display: none;
