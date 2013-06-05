@@ -16,7 +16,7 @@ module Pictures
         type, relative_path = path[1..-1].split("/", 2)
         @file_server.root = nil
 
-        if type == "files" && File.image?(relative_path)
+        if type == "files" && relative_path && File.image?(relative_path)
           @file_server.root = Pictures.dir.to_s
         elsif type == "previews"
           @file_server.root = Pictures.previews_dir.to_s

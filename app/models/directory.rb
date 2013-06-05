@@ -46,6 +46,6 @@ class Directory < Item
     @directories = dirs.sort_by { |d| d.basename.to_s.downcase }.map { |d| Directory.new(d) }
     @directories.unshift Directory.new(parent, true) unless self == Pictures.dir
 
-    @pictures = pics.select { |p| File::IMAGE_EXTS.include?(p.extname) }.sort_by { |p| p.mtime }.map { |p| Picture.new(p) }
+    @pictures = pics.select { |p| File::IMAGE_EXTS.include?(p.extname) }.sort_by { |p| p.mtime }.reverse.map { |p| Picture.new(p) }
   end
 end
