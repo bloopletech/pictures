@@ -4,7 +4,7 @@ class Picture < Item
     if !preview_path.exist? || force
       begin
         preview_path.dirname.descend { |p| p.mkdir unless p.exist? }
-        `convert #{File.escape_name("#{self}[0]")} -geometry '172x172^' +repage -gravity Center -crop '172x172+0+0' +repage -quality 50 -strip #{File.escape_name(preview_path.to_s)}`
+        `convert #{"#{self}[0]".shellescape} -geometry '198x198^' +repage -gravity Center -crop '198x198+0+0' +repage -quality 50 -strip #{preview_path.to_s.shellescape}`
       rescue Exception => e
         Rails.logger.debug("#{e.message}\n#{e.backtrace}")
       end
@@ -28,16 +28,6 @@ class Picture < Item
   def open
     increment!(:opens)
     update_attribute(:last_opened_at, DateTime.now)
-  end
-
-  def export
-    begin
-      FileUtils.mkdir_p(File.dirname("#{Pictures.exported_dir}/#{path}"))
-      FileUtils.cp_r(real_path, "#{Pictures.exported_dir}/#{path}")
-    rescue Exception => e
-      ActionDispatch::ShowExceptions.new(Pictures::Application.instance).send(:log_error, e)
-      return
-    end
   end
 
   def self.sort_key(title)

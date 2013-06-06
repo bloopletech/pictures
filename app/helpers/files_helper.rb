@@ -1,5 +1,5 @@
 module FilesHelper
-  include ActsAsTaggableOn::TagsHelper
+#  include ActsAsTaggableOn::TagsHelper
 
   def is_last_page?(collection)
     collection.total_pages == 0 || (collection.total_pages == (params[:page].blank? ? 1 : params[:page].to_i))
@@ -10,7 +10,8 @@ module FilesHelper
   end
 
   def wbrize(str)
-    raw str.split(' ').map { |sub_str| sub_str.split(/(.{,30})/).map { |s| h s }.join("<wbr>") }.join(' ')
+    str
+#    raw str.split(' ').map { |sub_str| sub_str.split(/(.{,15})/).map { |s| h s }.join("<wbr>") }.join(' ')
   end
 
   def file_title(file, show)

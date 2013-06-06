@@ -1,13 +1,12 @@
 <li id="<%= dom_id file %>" class="page_<%= @files.current_page %> <%= file.class.name.downcase %>">
-  <div class="wrapper">
-    <%= link_to(image_tag(file.preview_url), file.url) %>
-    <div class="info-wrapper">
-      <div class="info">
-        <%= file_title(file, true) %>
-        <% if file.Directory? %>
-          <%= image_tag("icons/page_white.png", :title => "Children") %> <%= file.files.length %>
-        <% end %>
-      </div>
+  <%= link_to(image_tag(file.preview_url), file.url) %>
+  <div class="info-wrapper">
+    <div class="info">
+      <%= file_title(file, true) %>
+      <% if file.Directory? %>
+        <span class="directories" title="Directories"><%= number_with_delimiter(file.directories.length - 1) %></span>
+        <span class="pictures" title="Pictures"><%= number_with_delimiter(file.pictures.length) %></span>
+      <% end %>
     </div>
   </div>
 </li>

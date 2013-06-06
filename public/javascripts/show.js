@@ -29,7 +29,7 @@ $(function() {
     event.stopPropagation();
   });
 
-  $("li.picture > .wrapper > a").live("click", function(event) {
+  $("li.picture > a").live("click", function(event) {
     performer.css({ maxWidth: "100%", maxHeight: "100%", marginLeft: "0", marginTop: "0" }).hide();
     performer.attr("src", $(this).attr("href"));
     backdrop.show();
